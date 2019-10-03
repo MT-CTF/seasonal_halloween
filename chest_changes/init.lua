@@ -12,6 +12,5 @@ minetest.override_item("tsm_chests:chest", {
 
 			spooky_effects.spawn_angry_ghost(pos, player)
 		end
-
 	end,
 })
