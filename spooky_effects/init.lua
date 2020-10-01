@@ -34,7 +34,6 @@ function spooky_effects.spawn_angry_ghost(pos, target, vel, accel)
 		collision_removal = true,
 		object_collision = true,
 		texture = "spooky_effects_ghost_angry.png",
-		playername = target:get_player_name(),
 		glow = 8
 	})
 end
