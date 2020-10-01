@@ -26,7 +26,7 @@ function spooky_effects.spawn_angry_ghost(pos, target, vel, accel)
 
 	minetest.add_particle({
 		pos = pos,
-		velocity = vector.multiply(vector.direction(pos, dest), 8),
+		velocity = vector.multiply(vector.direction(pos, dest), vel or 8),
 		acceleration = accel or {x=0, y=0, z=0},
 		expirationtime = 1.5,
 		size = 10,
@@ -38,3 +38,7 @@ function spooky_effects.spawn_angry_ghost(pos, target, vel, accel)
 		glow = 8
 	})
 end
+
+ctf.register_on_killedplayer(function(victim, killer)
+	spooky_effects.spawn_angry_ghost(minetest.get_player_by_name(victim):get_pos(), minetest.get_player_by_name(killer))
+end)
