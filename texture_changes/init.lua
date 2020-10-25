@@ -30,7 +30,27 @@ minetest.register_on_mods_loaded(function()
 			minetest.override_item(name, {def.special_tiles})
 		end
 	end
-	
+
+	local tools = {"sword", "pick", "axe", "shovel"}
+	for name, def in pairs(minetest.registered_tools) do
+		for _, tool in ipairs(tools) do
+			if name:find(tool) then
+				local wield_image
+
+				if tool == "shovel" then
+					wield_image = def.wield_image.."^(overlay_shovel.png^[transformR90)"
+				end
+
+				minetest.override_item(name, {
+					inventory_image = ("%s^overlay_%s.png"):format(def.inventory_image, tool),
+					wield_image = wield_image,
+				})
+
+				break
+			end
+		end
+	end
+
 	minetest.override_item("default:water_source", {post_effect_color = {a = 150, r = 67, g = 13, b = 13}})
 	minetest.override_item("default:water_flowing", {post_effect_color = {a = 150, r = 67, g = 13, b = 13}})
 end)
