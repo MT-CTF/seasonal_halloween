@@ -1,16 +1,21 @@
-minetest.override_item("tsm_chests:chest", {
-	on_rightclick = function(pos)
-		spooky_effects.spawn_ghost(pos)
-	end,
-	on_metadata_inventory_take = function(pos, listname, index, stack, player)
-		minetest.log("action", player:get_player_name() ..
-			" takes stuff from chest at " .. minetest.pos_to_string(pos))
-		local inv = minetest.get_inventory({type = "node", pos=pos})
-		if not inv or inv:is_empty("main") then
-			minetest.set_node(pos, {name="air"})
-			minetest.show_formspec(player:get_player_name(), "", player:get_inventory_formspec())
+if os.date("%m") ~= "10" or tonumber(os.date("%d")) < 17 then return end
 
+local def = table.copy(minetest.registered_nodes["ctf_map:chest"])
+
+minetest.override_item("ctf_map:chest", {
+	on_rightclick = function(pos, ...)
+		spooky_effects.spawn_ghost(pos)
+
+		return def.on_rightclick(pos, ...)
+	end,
+})
+
+minetest.override_item("ctf_map:chest_opened", {
+	on_metadata_inventory_take = function(pos, listname, index, stack, player, ...)
+		if math.random(1, 4) == 1 then
 			spooky_effects.spawn_angry_ghost(pos, player)
 		end
+
+		return def.on_metadata_inventory_take(pos, listname, index, stack, player, ...)
 	end,
 })

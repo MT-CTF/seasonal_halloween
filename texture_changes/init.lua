@@ -1,3 +1,17 @@
+if os.date("%m") ~= "10" or tonumber(os.date("%d")) < 17 then return end
+
+local function get_color(texture)
+	-- Change trees to a dark grey/brown
+	if texture:find("tree") and not (texture:find("aspen") or texture:find("leaves")) then
+		return "^[colorize:#171716:111"
+	-- Make sands a bit darker too
+	elseif texture:find("sand") then
+		return "^[colorize:#4c4238:90"
+	else -- Color a little orange
+		return "^[colorize:#9b6300:40"
+	end
+end
+
 minetest.register_on_mods_loaded(function()
 	for name, def in pairs(minetest.registered_nodes) do
 		if def.tiles then
@@ -54,13 +68,3 @@ minetest.register_on_mods_loaded(function()
 	minetest.override_item("default:water_source", {post_effect_color = {a = 150, r = 67, g = 13, b = 13}})
 	minetest.override_item("default:water_flowing", {post_effect_color = {a = 150, r = 67, g = 13, b = 13}})
 end)
-
-function get_color(texture)
-	if texture:find("tree") and not (texture:find("aspen") or texture:find("leaves")) then -- Change trees to a dark grey/brown
-		return "^[colorize:#171716:111"
-	elseif texture:find("sand") then -- Make sands a bit darker too
-		return "^[colorize:#4c4238:100"
-	else -- Color a little orange
-		return "^[colorize:#9b6300:40"
-	end
-end

@@ -1,3 +1,5 @@
+if os.date("%m") ~= "10" or tonumber(os.date("%d")) < 17 then return end
+
 spooky_effects = {}
 
 function spooky_effects.spawn_ghost(pos, vel, accel)
@@ -17,19 +19,20 @@ function spooky_effects.spawn_ghost(pos, vel, accel)
 end
 
 function spooky_effects.spawn_angry_ghost(pos, target, vel, accel)
-	if not target then
-		minetest.log("[ERROR] target for angry ghost not found!")
-	end
+	local dest
 
-	local dest = target:get_pos()
-	dest.y = dest.y + 1.3
+	if not target then
+		dest = pos:offset(0, 4, 0)
+	else
+		dest = target:get_pos():offset(0, 1.3, 0)
+	end
 
 	minetest.add_particle({
 		pos = pos,
-		velocity = vector.multiply(vector.direction(pos, dest), vel or 8),
+		velocity = vector.multiply(vector.direction(pos, dest), vel or 9),
 		acceleration = accel or {x=0, y=0, z=0},
-		expirationtime = 1.5,
-		size = 10,
+		expirationtime = 1.4,
+		size = 11,
 		collisiondetection = false,
 		collision_removal = true,
 		object_collision = true,
@@ -38,6 +41,6 @@ function spooky_effects.spawn_angry_ghost(pos, target, vel, accel)
 	})
 end
 
-ctf.register_on_killedplayer(function(victim, killer)
-	spooky_effects.spawn_angry_ghost(minetest.get_player_by_name(victim):get_pos(), minetest.get_player_by_name(killer))
+minetest.register_on_dieplayer(function(ded)
+	spooky_effects.spawn_angry_ghost(ded:get_pos())
 end)
