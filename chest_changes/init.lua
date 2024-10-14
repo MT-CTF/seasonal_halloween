@@ -23,7 +23,9 @@ minetest.override_item("ctf_map:chest", {
 	on_rightclick = function(pos, ...)
 		spooky_effects.spawn_ghost(pos)
 
-		return def.on_rightclick(pos, ...)
+		if def.on_rightclick then
+			return def.on_rightclick(pos, ...)
+		end
 	end,
 })
 
