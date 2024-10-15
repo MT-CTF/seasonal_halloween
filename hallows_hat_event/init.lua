@@ -167,7 +167,9 @@ end)
 sfinv.register_page("hallows_hat_event:progress", {
 	title = minetest.colorize("orange", "Event!"),
 	is_in_nav = function(self, player)
-		return ctf_teams.get(player) and true or false
+		local meta = player:get_meta()
+
+		return not meta:get_int(COSMETIC_KEY) or meta:get_int(COSMETIC_KEY) ~= 1
 	end,
 	get = function(self, player, context)
 		local meta = player:get_meta()
