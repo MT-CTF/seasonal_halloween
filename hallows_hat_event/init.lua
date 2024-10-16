@@ -86,7 +86,13 @@ local ID_AIR = minetest.CONTENT_AIR
 local ID_IGNORE = minetest.CONTENT_IGNORE
 local ID_WATER = minetest.get_content_id("default:water_source")
 ctf_api.register_on_new_match(function()
-	local spawn_amount = math.max(5, math.min(3 * #minetest.get_connected_players(), 50))
+	local spawn_amount = math.ceil(math.max(
+		5,
+		math.min(
+			REQUIRED_LANTERNS + (ctf_map.current_map.dirname == "pumpkin_hills" and 10 or 0),
+			3 * #minetest.get_connected_players() * (ctf_map.current_map.dirname == "pumpkin_hills" and 1.5 or 1)
+		)
+	))
 
 	minetest.after(5, function()
 		local vm = VoxelManip()
