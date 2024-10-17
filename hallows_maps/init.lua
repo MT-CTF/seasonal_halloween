@@ -6,7 +6,7 @@ local old_select_map_for_mode = ctf_modebase.map_catalog.select_map_for_mode
 local was_last = false
 local first_map = true
 function ctf_modebase.map_catalog.select_map_for_mode(mode, ...)
-	if first_map or (math.random(1, 6) == 2 and not was_last) then
+	if first_map or (math.random(1, 10) == 2 and not was_last) then
 		was_last = true
 		first_map = false
 
