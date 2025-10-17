@@ -11,12 +11,12 @@ local dig_func = function(score, item) return function(pos, _, digger)
 		return
 	end
 
-	local meta = digger:get_meta()
-	local old_val = meta:get_int(META_KEY)
+	local dname = digger:get_player_name()
+	local old_val = ctf_core.meta_get_int(dname, META_KEY)
 	local new_val = old_val + score
 
 	if old_val < REQUIRED_LANTERNS then
-		meta:set_int(META_KEY, new_val)
+		ctf_core.meta_set_int(dname, META_KEY, new_val)
 		sfinv.set_page(digger, sfinv.get_page(digger))
 
 		if new_val >= REQUIRED_LANTERNS then
@@ -25,7 +25,7 @@ local dig_func = function(score, item) return function(pos, _, digger)
 				color = "success",
 			})
 
-			meta:set_int(COSMETIC_KEY, 1)
+			ctf_core.meta_set_int(dname, COSMETIC_KEY, 1)
 		else
 			hud_events.new(digger:get_player_name(), {
 				text = string.format("[Event] %d/%d lantern points", new_val, REQUIRED_LANTERNS),
@@ -173,13 +173,13 @@ end)
 sfinv.register_page("hallows_hat_event:progress", {
 	title = minetest.colorize("orange", "Event!"),
 	is_in_nav = function(self, player)
-		local meta = player:get_meta()
+		local pname = PlayerName(player)
 
-		return not meta:get_int(COSMETIC_KEY) or meta:get_int(COSMETIC_KEY) ~= 1
+		return not ctf_core.meta_get_int(pname, COSMETIC_KEY) or ctf_core.meta_get_int(pname, COSMETIC_KEY) ~= 1
 	end,
 	get = function(self, player, context)
-		local meta = player:get_meta()
-		local score = meta:get_int(META_KEY)
+		local pname = PlayerName(player)
+		local score = ctf_core.meta_get_int(pname, META_KEY)
 
 		local form = "real_coordinates[true]"
 
@@ -193,8 +193,8 @@ sfinv.register_page("hallows_hat_event:progress", {
 		else
 			form = form .. "label[0.1,0.5;Nice job! Pop over to the customization tab to try out your new hat!]"
 
-			if not meta:get_int(COSMETIC_KEY) or meta:get_int(COSMETIC_KEY) ~= 1 then
-				meta:set_int(COSMETIC_KEY, 1)
+			if not ctf_core.meta_get_int(pname, COSMETIC_KEY) or ctf_core.meta_get_int(pname, COSMETIC_KEY) ~= 1 then
+				ctf_core.meta_set_int(pname, COSMETIC_KEY, 1)
 			end
 		end
 
