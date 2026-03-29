@@ -44,3 +44,7 @@ end
 minetest.register_on_dieplayer(function(ded)
 	spooky_effects.spawn_angry_ghost(ded:get_pos())
 end)
+
+minetest.register_on_joinplayer(function(player, last_login)
+	player:override_day_night_ratio(0.3)
+end)
